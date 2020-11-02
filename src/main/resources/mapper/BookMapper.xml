@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootbook.mapper.BookMapper">
+
+    <resultMap type="com.example.springbootbook.model.Book" id="BookMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="author" column="author" jdbcType="VARCHAR"/>
+        <result property="publish" column="publish" jdbcType="VARCHAR"/>
+        <result property="pages" column="pages" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="OTHER"/>
+        <result property="bookcaseid" column="bookcaseid" jdbcType="INTEGER"/>
+        <result property="abled" column="abled" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BookMap">
+        select id,
+               name,
+               author,
+               publish,
+               pages,
+               price,
+               bookcaseid,
+               abled
+        from bookmanage.book
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BookMap">
+        select id,
+               name,
+               author,
+               publish,
+               pages,
+               price,
+               bookcaseid,
+               abled
+        from bookmanage.book
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BookMap">
+        select
+        id, name, author, publish, pages, price, bookcaseid, abled
+        from bookmanage.book
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="author != null and author != ''">
+                and author = #{author}
+            </if>
+            <if test="publish != null and publish != ''">
+                and publish = #{publish}
+            </if>
+            <if test="pages != null">
+                and pages = #{pages}
+            </if>
+            <if test="price != null">
+                and price = #{price}
+            </if>
+            <if test="bookcaseid != null">
+                and bookcaseid = #{bookcaseid}
+            </if>
+            <if test="abled != null">
+                and abled = #{abled}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into bookmanage.book(name, author, publish, pages, price, bookcaseid, abled)
+        values (#{name}, #{author}, #{publish}, #{pages}, #{price}, #{bookcaseid}, #{abled})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bookmanage.book
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="author != null and author != ''">
+                author = #{author},
+            </if>
+            <if test="publish != null and publish != ''">
+                publish = #{publish},
+            </if>
+            <if test="pages != null">
+                pages = #{pages},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="bookcaseid != null">
+                bookcaseid = #{bookcaseid},
+            </if>
+            <if test="abled != null">
+                abled = #{abled},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from bookmanage.book
+        where id = #{id}
+    </delete>
+
+</mapper>
